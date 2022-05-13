@@ -20,7 +20,6 @@ def add_student_details():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         print("File Uploaded Sucessfully!!!!!")
-
     input_cols = ['student_id', 'first_name', 'last_name', 'standard', 'age', 'gender']
     input_df = pd.read_csv(UPLOAD_FOLDER + 'student_details_input.csv',names=input_cols, header=None)
 
