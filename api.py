@@ -15,8 +15,14 @@ import pandas as pd
 def add_student_details():
     #function to add new student details to our db
 
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print("File Uploaded Sucessfully!!!!!")
+
     input_cols = ['student_id', 'first_name', 'last_name', 'standard', 'age', 'gender']
-    input_df = pd.read_csv('/home/divum/PycharmProjects/flask_crud_practice/student_details_input.csv',names=input_cols, header=None)
+    input_df = pd.read_csv(UPLOAD_FOLDER + 'student_details_input.csv',names=input_cols, header=None)
 
     for index, row in input_df.iterrows():
         student.add_details(row['student_id'], row['first_name'], row['last_name'], row['standard'], row['age'], row['gender'])
@@ -31,8 +37,11 @@ def all_students_details():
 
 @app.route('/students/<int:student_id>',methods=['GET'])
 def student_details_route(student_id):
-    return_value=student.get_student_details(student_id)
-    return jsonify(return_value)
+    try:
+        return_value=student.get_student_details(student_id)
+        return jsonify(return_value)
+    except:
+        return "Student Record Not Found"
 
 # route to update student details with PUT method
 @app.route('/students/<int:id>', methods=['PUT'])

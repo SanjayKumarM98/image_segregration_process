@@ -35,7 +35,7 @@ class student(db.Model):
         else:
             new_student=student(student_id=_student_id,first_name=_first_name,last_name=_last_name,standard=_standard,age=_age,gender=_gender)
             db.session.add(new_student)
-            dbPOST.session.commit()
+            db.session.commit()
 
     def get_all_student_details():
         #function to get all student details from database
