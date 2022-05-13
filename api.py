@@ -41,17 +41,18 @@ def student_details_route(student_id):
         return_value=student.get_student_details(student_id)
         return jsonify(return_value)
     except:
-        return "Student Record Not Found"
+        return "Student Record Is Not Found In the Database"
 
 # route to update student details with PUT method
 @app.route('/students/<int:id>', methods=['PUT'])
 def update_student_details(id):
-    '''Function to edit student details in our database using movie id'''
+    #Function to edit student details in our database using movie id
     request_data = request.json
     student.update_student_details(id,request_data["first_name"],request_data["last_name"],request_data["standard"],request_data["age"],request_data["gender"])
     response = Response("Student Details Updated", status=200, mimetype='application/json')
     return response
 
+# route to delete student details with DELETE method
 @app.route('/students/<int:student_id>',methods=['DELETE'])
 def delete_student_details(student_id):
     student.delete_student_details(student_id)

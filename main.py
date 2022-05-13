@@ -2,7 +2,6 @@ from settings import *
 import json
 
 # Initializing our database
-
 db=SQLAlchemy(app)
 
 # the class student will inherit the db.Model of SQLAlchemy

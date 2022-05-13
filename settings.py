@@ -13,9 +13,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://sanjay:password@l
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER='/home/divum/PycharmProjects/flask_crud_practice/'
-ALLOWED_EXTENSIONS={'csv'}
 
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS={'csv'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
