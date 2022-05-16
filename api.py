@@ -1,4 +1,4 @@
-from main import *
+from model import *
 import pandas as pd
 
 #route to get all students details
@@ -21,11 +21,11 @@ def add_student_details():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         print("File Uploaded Sucessfully!!!!!")
 
-    input_cols = ['student_id', 'first_name', 'last_name', 'standard', 'age', 'gender']
+    input_cols = ['student_id', 'first_name', 'last_name', 'standard', 'age', 'gender','dob']
     input_df = pd.read_csv(UPLOAD_FOLDER + 'student_details_input.csv',names=input_cols, header=None)
 
     for index, row in input_df.iterrows():
-        student.add_details(row['student_id'], row['first_name'], row['last_name'], row['standard'], row['age'], row['gender'])
+        student.add_details(row['student_id'], row['first_name'], row['last_name'], row['standard'], row['age'], row['gender'], row['dob'])
 
     response = Response("Student Details Added",status=201,mimetype='application/json')
     return response
@@ -48,7 +48,7 @@ def student_details_route(student_id):
 def update_student_details(id):
     #Function to edit student details in our database using movie id
     request_data = request.json
-    student.update_student_details(id,request_data["first_name"],request_data["last_name"],request_data["standard"],request_data["age"],request_data["gender"])
+    student.update_student_details(id,request_data["first_name"],request_data["last_name"],request_data["standard"],request_data["age"],request_data["gender"],request_data["dob"])
     response = Response("Student Details Updated", status=200, mimetype='application/json')
     return response
 
