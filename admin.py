@@ -32,79 +32,75 @@ def get_all_users(current_user):
 
 # --------------------
 #This route sends the requested user details
-@app.route('/practice/admin/<public_id>',methods=['GET'])
+@app.route('/practice/admin/<public_id>',methods=['GET','PUT','DELETE'])
 @token_required
-def get_one_user_details(current_user,public_id):
+def user_details(current_user,public_id):
 
-    if current_user.admin:
+    if request.method == 'GET':
 
-        user=Info.query.filter_by(public_id=public_id).first()
+        if current_user.admin:
 
-        if user.deleted_date == "None":
-            return jsonify({'public_id':user.public_id,'email':user.email,'name':user.name,'admin_access':user.admin, 'created_date':user.created_date, 'updated_date':user.updated_date, 'deleted_date':user.deleted_date})
+            user=Info.query.filter_by(public_id=public_id).first()
+
+            if user.deleted_date == "None":
+                return jsonify({'public_id':user.public_id,'email':user.email,'name':user.name,'admin_access':user.admin, 'created_date':user.created_date, 'updated_date':user.updated_date, 'deleted_date':user.deleted_date})
+            else:
+                return jsonify({'message':'User record has been deleted !!!!'})
+
         else:
-            return jsonify({'message':'User record has been deleted !!!!'})
+            return jsonify({'message':'you dont have access to this page'})
 
-    else:
-        return jsonify({'message':'you dont have access to this page'})
+    # --------------------
+    if request.method == 'DELETE':
 
-# --------------------
-#This route is used to delete user from DB.
-@app.route('/practice/admin/<public_id>',methods=['DELETE'])
-@token_required
-def delete_user(current_user,public_id):
+        if current_user.admin:
 
-    if current_user.admin:
+            user = Info.query.filter_by(public_id=public_id).first()
 
-        user = Info.query.filter_by(public_id=public_id).first()
+            now=datetime.now()
+            deleted_date=now.strftime("%d-%m-%Y %H:%M:%S")
 
-        now=datetime.now()
-        deleted_date=now.strftime("%d-%m-%Y %H:%M:%S")
+            user.deleted_date=deleted_date
 
-        user.deleted_date=deleted_date
+            db.session.commit()
 
-        db.session.commit()
-
-        return jsonify({'message':'successfully deleted user details from db'})
-    else:
-        return jsonify({'message':'you dont have access to this page'})
-
-# --------------------
-#This route is used to update particular information of user
-@app.route('/practice/admin/<public_id>',methods=['PUT'])
-@token_required
-def update_user_details(current_user,public_id):
-
-    if current_user.admin:
-
-        data = request.form
-
-        column_name=data.get('field')
-        value=data.get('value')
-
-        user = Info.query.filter_by(public_id=public_id).first()
-
-        if column_name == 'name':
-            user.name = value
-        elif column_name == 'email':
-            user.email = value
-        elif column_name == 'password':
-            user.password = generate_password_hash(value)
-        elif column_name == 'admin':
-            user.admin = value
-        elif column_name == 'created_date' or column_name == 'updated_date' or column_name == 'deleted_date':
-            return jsonify({'message':'you cant edit this column!!!!'})
+            return jsonify({'message':'successfully deleted user details from db'})
         else:
-            return jsonify({'message':'request-form is not sent!!!!'})
+            return jsonify({'message':'you dont have access to this page'})
 
-        now=datetime.now()
-        updated_date=now.strftime("%d-%m-%Y %H:%M:%S")
+    # --------------------
+    if request.method == 'PUT':
 
-        user.updated_date=updated_date
+        if current_user.admin:
 
-        db.session.commit()
+            data = request.form
 
-        return jsonify({'message':'user has been promoted!!!'})
+            column_name=data.get('field')
+            value=data.get('value')
 
-    else:
-        return jsonify({'message':'you dont have access to this page'})
+            user = Info.query.filter_by(public_id=public_id).first()
+
+            if column_name == 'name':
+                user.name = value
+            elif column_name == 'email':
+                user.email = value
+            elif column_name == 'password':
+                user.password = generate_password_hash(value)
+            elif column_name == 'admin':
+                user.admin = value
+            elif column_name == 'created_date' or column_name == 'updated_date' or column_name == 'deleted_date':
+                return jsonify({'message':'you cant edit this column!!!!'})
+            else:
+                return jsonify({'message':'request-form is not sent!!!!'})
+
+            now=datetime.now()
+            updated_date=now.strftime("%d-%m-%Y %H:%M:%S")
+
+            user.updated_date=updated_date
+
+            db.session.commit()
+
+            return jsonify({'message':'user has been promoted!!!'})
+
+        else:
+            return jsonify({'message':'you dont have access to this page'})
