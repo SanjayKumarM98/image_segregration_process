@@ -36,6 +36,7 @@ def get_all_users(current_user):
 @token_required
 def user_details(current_user,public_id):
 
+    # To get only one user details
     if request.method == 'GET':
 
         if current_user.admin:
@@ -51,6 +52,8 @@ def user_details(current_user,public_id):
             return jsonify({'message':'you dont have access to this page'})
 
     # --------------------
+    # To delete a user details in DB
+
     if request.method == 'DELETE':
 
         if current_user.admin:
@@ -69,6 +72,8 @@ def user_details(current_user,public_id):
             return jsonify({'message':'you dont have access to this page'})
 
     # --------------------
+    # To update particular details of a user in DB
+
     if request.method == 'PUT':
 
         if current_user.admin:
