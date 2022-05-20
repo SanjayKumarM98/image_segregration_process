@@ -3,6 +3,7 @@ from models import *
 # decorator for verifying the JWT
 def token_required(f):
     @wraps(f)
+
     def decorated(*args, **kwargs):
         token = None
 

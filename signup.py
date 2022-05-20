@@ -9,6 +9,7 @@ def signup():
     # gets name, email and password
     name,email,password = data['name'],data['email'],data['password']
 
+    # update admin value as true or false if it is passed, otherwise update its default value i.e., false
     try:
         admin = data['admin']
     except:
@@ -18,7 +19,6 @@ def signup():
     user = Info.query.filter_by(email=email).first()
 
     if not user:
-
         now=datetime.now()
         created_date=now.strftime("%d-%m-%Y %H:%M:%S")
 

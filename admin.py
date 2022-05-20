@@ -3,7 +3,9 @@ from decorator import *
 from login import *
 from signup import *
 
-# User Database Route
+# Info Database Route
+
+# --------------------
 # this route sends back list of users
 @app.route('/practice/admin', methods=['GET'])
 @token_required
@@ -28,6 +30,7 @@ def get_all_users(current_user):
     else:
         return jsonify({'message':'you dont have access to this page'})
 
+# --------------------
 #This route sends the requested user details
 @app.route('/practice/admin/<public_id>',methods=['GET'])
 @token_required
@@ -45,6 +48,7 @@ def get_one_user_details(current_user,public_id):
     else:
         return jsonify({'message':'you dont have access to this page'})
 
+# --------------------
 #This route is used to delete user from DB.
 @app.route('/practice/admin/<public_id>',methods=['DELETE'])
 @token_required
@@ -65,6 +69,7 @@ def delete_user(current_user,public_id):
     else:
         return jsonify({'message':'you dont have access to this page'})
 
+# --------------------
 #This route is used to update particular information of user
 @app.route('/practice/admin/<public_id>',methods=['PUT'])
 @token_required

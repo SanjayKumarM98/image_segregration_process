@@ -3,6 +3,7 @@ from models import *
 # route for logging user in
 @app.route('/practice/login', methods=['POST'])
 def login():
+
     # creates dictionary of form data
     auth = request.authorization
 
