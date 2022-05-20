@@ -87,7 +87,10 @@ def user_details(current_user,public_id):
             elif column_name == 'password':
                 user.password = generate_password_hash(value)
             elif column_name == 'admin':
-                user.admin = value
+                if value == 'true':
+                    user.admin = True
+                else:
+                    user.admin = False
             elif column_name == 'created_date' or column_name == 'updated_date' or column_name == 'deleted_date':
                 return jsonify({'message':'you cant edit this column!!!!'})
             else:
